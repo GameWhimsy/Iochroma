@@ -279,7 +279,7 @@ public class MultilayerPlane implements Iterable<MapLayer>
     }
     
     /**
-     * Determines wether the point (x,y) falls within the plane.
+     * Determines whether the point (x,y) falls within the plane.
      *
      * @param x
      * @param y
