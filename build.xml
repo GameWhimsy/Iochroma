@@ -41,7 +41,7 @@
   </target>
 
   <target name="compile" depends="init" description="Compile the source">
-    <javac source="1.5" target="1.5" srcdir="${src}" destdir="${build}"/>
+    <javac source="1.6" target="1.6" srcdir="${src}" destdir="${build}"/>
     <copy todir="${build}/tiled/mapeditor/resources">
       <fileset dir="./src/tiled/mapeditor/resources">
         <include name="*.png" />
