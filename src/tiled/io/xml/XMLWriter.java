@@ -141,7 +141,7 @@ public class XMLWriter
             w.write(" " + name + "=\"" + escapedContent + "\"");
         } else {
             throw new XMLWriterException(
-                    "Can't write attribute without open start tag.");
+                    "Can't write attribute " + name + "=" + content + " without open start tag.");
         }
     }
 

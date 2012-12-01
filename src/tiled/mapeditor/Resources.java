@@ -21,7 +21,7 @@ import javax.swing.ImageIcon;
 
 /**
  * This class implements static accessors to common editor resources. These
- * currently include icons and internationalized strings.
+ * currently include icons.
  *
  * @version $Id$
  */

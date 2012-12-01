@@ -192,23 +192,6 @@ public class MapEditor implements ActionListener, MouseListener,
     private SelectionSet selectionSet = new SelectionSet();
     
     public MapEditor(){
-        /*
-        eraserBrush = new Eraser();
-        brushes.add(eraserBrush());
-        setBrush(eraserBrush);
-        */
-
-        /*
-        try {
-            Image imgPaintCursor = Resources.getImage("cursor-pencil.png");
-
-            curPaint = Toolkit.getDefaultToolkit().createCustomCursor(
-                    imgPaintCursor, new Point(0,0), "paint");
-        } catch (Exception e) {
-            System.out.println("Error while loading custom cursors!");
-            e.printStackTrace();
-        }
-        */
         
         objectSelectionToolSemantic = new ObjectSelectionToolSemantic(this);
         
@@ -276,8 +259,6 @@ public class MapEditor implements ActionListener, MouseListener,
         toggleParallaxModeAction.applyState();
         
         appFrame.setVisible(true);
-
-        //tileInstancePropertiesDialog = new TileInstancePropertiesDialog(this);
 
         // Restore the state of the main frame. This needs to happen after
         // making the frame visible, otherwise it has no effect (in Linux).

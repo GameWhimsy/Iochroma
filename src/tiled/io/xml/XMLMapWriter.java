@@ -433,8 +433,8 @@ public class XMLMapWriter implements MapWriter
             writeObjectGroup((ObjectGroup) l, w, wp);
         } else if (l instanceof TileLayer) {
             final TileLayer tl = (TileLayer) l;
-            w.writeAttribute("tileWidth", tl.getTileWidth());
-            w.writeAttribute("tileHeight", tl.getTileHeight());
+            //w.writeAttribute("tileWidth", tl.getTileWidth());
+            //w.writeAttribute("tileHeight", tl.getTileHeight());
             w.startElement("data");
             if (encodeLayerData) {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
