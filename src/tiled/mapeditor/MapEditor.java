@@ -1,11 +1,12 @@
 /*
- *  Tiled Map Editor, (c) 2004-2008
+ * Iochroma Level Editor (c) 2012 Tulonsae
  *
+ * Modified from:
+ *  Tiled Map Editor, (c) 2004-2008
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- *
  *  Adam Turk <aturk@biggeruniverse.com>
  *  Bjorn Lindeijer <bjorn@lindeijer.nl>
  */
@@ -54,12 +55,10 @@ import tiled.util.TiledConfiguration;
 import tiled.view.MapView;
 
 /**
- * The main class for the Tiled Map Editor.
+ * Main class for the Iochroma Level Editor.
  */
-public class MapEditor implements ActionListener, MouseListener,
-        MouseMotionListener, MouseWheelListener, MapChangeListener, ListSelectionListener,
-        ChangeListener, ComponentListener
-{
+public class MapEditor implements ActionListener, MouseListener, MouseMotionListener, MouseWheelListener, MapChangeListener, ListSelectionListener, ChangeListener, ComponentListener {
+
     // Constants and the like
     private static final int PS_POINT     = 0;
     private static final int PS_PAINT     = 1;
