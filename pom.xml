@@ -1,0 +1,50 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.gamewhimsy.iochroma</groupId>
+  <artifactId>iochroma</artifactId>
+  <version>${project.releaseVersion}-${project.nameVersion}-${project.buildVersion}</version>
+  <packaging>jar</packaging>
+
+  <name>Iochroma</name>
+  <description>A level editor for 2d games using tiled maps.</description>
+  <url>https://github.com/GameWhimsy/Iochroma</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.mainclass>Main</project.mainclass>
+    <project.releaseVersion>0.0.1</project.releaseVersion>
+    <project.nameVersion>dawn</project.nameVersion>
+    <project.buildVersion>b1</project.buildVersion>
+    <project.javaVersion>1.7</project.javaVersion>
+    <junit.version>4.10</junit.version>
+  </properties>
+
+  <build>
+    <defaultGoal>clean install</defaultGoal>
+    <plugins>
+      <plugin>
+       <groupId>org.apache.maven.plugins</groupId>
+       <artifactId>maven-compiler-plugin</artifactId>
+       <version>2.0.2</version>
+       <configuration>
+         <source>1.7</source>
+         <target>1.7</target>
+       </configuration>
+      </plugin>
+      <plugin>
+       <groupId>org.apache.maven.plugins</groupId>
+       <artifactId>maven-jar-plugin</artifactId>
+       <version>2.3.1</version>
+       <configuration>
+         <archive>
+           <manifest>
+             <mainClass>${project.groupId}.${project.mainclass}</mainClass>
+           </manifest>
+         </archive>
+       </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
