@@ -46,5 +46,11 @@
        </configuration>
       </plugin>
     </plugins>
+    <resources>
+      <resource>
+        <directory>${basedir}/src/main/resources</directory>
+        <targetPath>resources</targetPath>
+      </resource>
+    </resources>
   </build>
 </project>
