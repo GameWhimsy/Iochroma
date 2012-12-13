@@ -7,6 +7,8 @@ package org.gamewhimsy.iochroma;
  */
 public class Level {
 
+    private boolean unsavedChanges = false;
+
     /**
      * Constructor for the level.
      */
@@ -20,6 +22,26 @@ public class Level {
      */
     public boolean hasFile() {
         return false;
+    }
+
+    /**
+     * Gets the save state of changes for this level.
+     *
+     * @return true if the active level has unsaved changes, otherwise false
+     */
+    // TODO - add undo stuff
+    public boolean hasUnsavedChanges() {
+        return unsavedChanges;
+    }
+
+    /**
+     * Saves the level.
+     *
+     * @return true if saved, false otherwise
+     */
+    public boolean save() {
+        // TODO
+        return true;
     }
 
 }

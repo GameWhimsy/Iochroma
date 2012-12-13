@@ -15,34 +15,36 @@ package org.gamewhimsy.iochroma.actions;
 
 import java.awt.event.ActionEvent;
 
-import org.gamewhimsy.iochroma.Editor;
 import org.gamewhimsy.iochroma.Resources;
 
 /**
- * Closes the currently opened level.
+ * Closes the currently active level.
+ * <p />
+ * Before closing, the user will be prompted to save any unsaved changes.
+ * If the user cancels saving, then the close action will be cancelled also.
  */
-public class CloseAction extends AbstractSaveAction {
+public class CloseAction extends AbstractBaseAction {
+
+    private ActionHelper helper;
 
     /**
-     * Constructs the close action.
+     * Constructs this action.
      *
-     * @param editor the level editor
+     * @param helper the action helper
      */
-    public CloseAction(Editor editor) {
-        super(editor, Resources.getString("menu.file.close"), Resources.getString("menu.file.close.tooltip"), Resources.getString("menu.file.close.key"));
+    public CloseAction(ActionHelper helper) {
+        super(Resources.getString("menu.file.close"), Resources.getString("menu.file.close.tooltip"), Resources.getString("menu.file.close.key"));
+
+        this.helper = helper;
     }
 
     /**
-     * Closes the level after checking for changes.
+     * Performs this action.
      *
      * @param e action event
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-
-        // save changes returns false if action is cancelled
-        if (saveChanges()) {
-            editor.setCurrentLevel(null);
-        }
+        helper.doCloseAction();
     }
 }

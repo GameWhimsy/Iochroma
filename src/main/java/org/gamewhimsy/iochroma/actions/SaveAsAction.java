@@ -15,36 +15,35 @@ package org.gamewhimsy.iochroma.actions;
 
 import java.awt.event.ActionEvent;
 
-import org.gamewhimsy.iochroma.Editor;
 import org.gamewhimsy.iochroma.Resources;
 
 /**
- * Saves the level with the chosen name and file format.
+ * Saves the active level with the chosen name and file format.
+ * <p />
+ * If the user cancels choosing, then the save action will be cancelled also.
  */
-public class SaveAsAction extends AbstractSaveAction {
+public class SaveAsAction extends AbstractBaseAction {
+
+    private ActionHelper helper;
 
     /**
-     * Constructs the save as action.
+     * Constructs this action.
      *
-     * @param editor the level editor
+     * @param helper the action helper
      */
-    public SaveAsAction(Editor editor) {
-        super(editor, Resources.getString("menu.file.saveas"), Resources.getString("menu.file.saveas.tooltip"), Resources.getString("menu.file.saveas.key"));
+    public SaveAsAction(ActionHelper helper) {
+        super(Resources.getString("menu.file.saveas"), Resources.getString("menu.file.saveas.tooltip"), Resources.getString("menu.file.saveas.key"));
+
+        this.helper = helper;
     }
 
     /**
-     * Saves the level after prompting for choice.
+     * Performs this action.
      *
      * @param e action event
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-
-        // file chooser returns false if action is cancelled
-        if (chooseFile()) {
-            // TODO add file format
-            saveLevel();
-        }
+        helper.doSaveAsAction();
     }
-
 }

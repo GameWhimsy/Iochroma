@@ -15,35 +15,42 @@ package org.gamewhimsy.iochroma.actions;
 
 import java.awt.event.ActionEvent;
 
-import org.gamewhimsy.iochroma.Editor;
 import org.gamewhimsy.iochroma.Resources;
 
 /**
- * Exits the app after prompting to save the level if it's been modified.
+ * Exits the application gracefully.
+ * <ul>
+ * <li>All levels will be closed, presenting the user with an opportunity to
+ *     save any unsaved changes.</li>
+ * <li>Performs any needed cleanup.</li>
+ * <li>Shuts down the application.</li>
+ * </ul>
+ * <p />
+ * If the user is presented any choice and cancels it, then the exit action
+ * will be cancelled also.
  */
-public class ExitAction extends AbstractSaveAction {
+public class ExitAction extends AbstractBaseAction {
+
+    private ActionHelper helper;
 
     /**
-     * Constructs the exit action.
+     * Constructs this action.
      *
-     * @param editor the level editor
+     * @param helper the action helper
      */
-    public ExitAction(Editor editor) {
-        super(editor, Resources.getString("menu.file.exit"), Resources.getString("menu.file.exit.tooltip"), Resources.getString("menu.file.exit.key"));
+    public ExitAction(ActionHelper helper) {
+        super(Resources.getString("menu.file.exit"), Resources.getString("menu.file.exit.tooltip"), Resources.getString("menu.file.exit.key"));
+
+        this.helper = helper;
     }
 
     /**
-     * Exits the application after checking for changes and graceful shutdown.
+     * Performs this action.
      *
      * @param e action event
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-
-        // save changes returns false if action is cancelled
-        if (saveChanges()) {
-            editor.shutdown();
-            System.exit(0);
-        }
+        helper.doExitAction();
     }
 }

@@ -26,8 +26,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import org.gamewhimsy.iochroma.actions.ActionHelper;
 import org.gamewhimsy.iochroma.actions.CloseAction;
 import org.gamewhimsy.iochroma.actions.ExitAction;
+import org.gamewhimsy.iochroma.actions.OpenAction;
 import org.gamewhimsy.iochroma.actions.SaveAction;
 import org.gamewhimsy.iochroma.actions.SaveAsAction;
 
@@ -36,23 +38,31 @@ import org.gamewhimsy.iochroma.actions.SaveAsAction;
  */
 public class Editor {
 
+    /**
+     * Application name.
+     */
+    protected static final String APP_NAME = "Iochroma";
+    protected static final int NUM_RECENT_FILES = 8;
+
     private static final int APP_WIDTH = 800;
     private static final int APP_HEIGHT = 600;
-
-    private boolean unsavedChanges = false;
 
     private JFrame appFrame;
     private JMenuBar menuBar;
     private JPanel mainPanel;
 
+    private final ActionHelper actionHelper;
     private final Action closeAction;
     private final Action exitAction;
+    private final Action openAction;
     private final Action saveAction;
     private final Action saveAsAction;
 
-    private Level currentLevel;
+    private Level activeLevel;
+    private Level activeLevelNext;
 
     private List<JMenuItem> listMenuItemNoLevel = new LinkedList<JMenuItem>();
+    private List<Level> levels = new LinkedList<Level>();
 
 
     /**
@@ -60,14 +70,16 @@ public class Editor {
      */
     public Editor() {
 
-        // create the actions
-        closeAction = new CloseAction(this);
-        exitAction = new ExitAction(this);
-        saveAction = new SaveAction(this);
-        saveAsAction = new SaveAsAction(this);
+        // create the action helper and actions
+        actionHelper = new ActionHelper(this);
+        closeAction = new CloseAction(actionHelper);
+        exitAction = new ExitAction(actionHelper);
+        openAction = new OpenAction(actionHelper);
+        saveAction = new SaveAction(actionHelper);
+        saveAsAction = new SaveAsAction(actionHelper);
 
         // create the application frame
-        appFrame = new JFrame("Iochroma");
+        appFrame = new JFrame(APP_NAME);
         appFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         appFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent event) {
@@ -79,7 +91,7 @@ public class Editor {
         appFrame.setSize(APP_WIDTH, APP_HEIGHT);
         appFrame.setVisible(true);
 
-        setCurrentLevel(null);
+        setActiveLevel(null);
     }
 
     /**
@@ -92,65 +104,92 @@ public class Editor {
     }
 
     /**
-     * Gets the current level.
+     * Gets the active level.
      *
-     * @return the current level
+     * @return the active level
      */
-    public Level getCurrentLevel() {
-        return currentLevel;
+    public Level getActiveLevel() {
+        return activeLevel;
     }
 
     /**
-     * Sets the current level.
+     * Sets the active level.
+     * <p />
+     * Specifiy <tt>null</tt> to have no active levels.
      *
-     * @param level level to load as current
+     * @param level level to load as active
      */
-    public void setCurrentLevel(Level current) {
+    public void setActiveLevel(Level level) {
 
-        currentLevel = current;
+        activeLevel = level;
+        boolean flag;
 
-        // unload level
-        if (currentLevel == null) {
-            updateMenuItems(listMenuItemNoLevel, false);
-            return;
+        if (activeLevel == null) {  // level was unloaded
+            activeLevelNext = null;
+            flag = false;
+        } else {  // level was loaded
+            flag = true;
+            // determine which level would be active if this level is removed
+            int cur = levels.indexOf(activeLevel);
+            if (cur == 0) {  // active is the only level
+                    activeLevelNext = null;
+            } else {
+                if (cur == (levels.size() - 1)) {  // active is at end of list
+                    activeLevelNext = levels.get(cur - 1);
+                } else {  // active is not at end
+                    activeLevelNext = levels.get(cur + 1);
+                }
+            }
         }
 
-        // load level
-        updateMenuItems(listMenuItemNoLevel, true);
+        // update gui
+        updateMenuItems(listMenuItemNoLevel, flag);
     }
 
     /**
-     * Gets the save state of changes for the current level.
+     * Adds a level to the list, making it the active level.
      *
-     * @return true if the current level has unsaved changes, otherwise false
+     * @param level level to be added
+     * @return true if level added, otherwise false
      */
-    // TODO - had undo stuff
-    public boolean hasUnsavedChanges() {
-        return unsavedChanges;
+    public boolean addLevel(Level level) {
+        if (levels.add(level)) {
+            setActiveLevel(level);
+            // TODO update the gui
+        }
+
+        return false;
+    }
+
+    /**
+     * Removes a level from the list, changing the active level.
+     * <p />
+     * The next level in the list will become active.  If there is no next
+     * level, then the previous level will become active.  If there are no
+     * subsequent levels, then it sets the active level to <tt>null</tt>.
+     *
+     * @param level level to be removed
+     * @return true if level removed, otherwise false
+     */
+    public boolean removeLevel(Level level) {
+
+        if (levels.remove(level)) {
+            setActiveLevel(activeLevelNext);
+            // TODO update the gui
+        }
+
+        return false;
     }
 
     /**
      * Handles a graceful shutdown when the editor is exiting.
-     */
-    public void shutdown() {
-        // TODO
-    }
-
-    /**
-     * Creates the main application panel.
      *
-     * @return the main app panel
+     * @return false if cancelled or error, true otherwise
      */
-    private JPanel createMainPanel() {
+    public boolean shutdown() {
+        // TODO
 
-/*
-        levelScrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        levelScrollPane.setBorder(null);
-*/
-
-        mainPanel = new JPanel(new BorderLayout());
-
-        return mainPanel;
+        return true;
     }
 
     /**
@@ -166,6 +205,8 @@ public class Editor {
 
         // create file menu
         JMenu fileMenu = new JMenu(Resources.getString("menu.file"));
+        fileMenu.add(new JMenuItem(openAction));
+        fileMenu.addSeparator();
         fileMenu.add(save);
         fileMenu.add(saveAs);
         fileMenu.addSeparator();
@@ -194,6 +235,31 @@ public class Editor {
         for (JMenuItem item : list) {
             item.setEnabled(flag);
         }
+    }
+
+    /**
+     * Creates the main application panel.
+     *
+     * @return the main app panel
+     */
+    private JPanel createMainPanel() {
+
+/*
+        levelScrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        levelScrollPane.setBorder(null);
+*/
+
+        mainPanel = new JPanel(new BorderLayout());
+
+        return mainPanel;
+    }
+
+    /**
+     * Loads a level map.
+     *
+     * @param filepath absolute filepath of the level to load
+     */
+    public void loadLevel(String filepath) {
     }
 
 }

@@ -18,12 +18,19 @@ import java.awt.event.ActionEvent;
 import org.gamewhimsy.iochroma.Resources;
 
 /**
- * Saves the active level.
+ * Opens and loads a level.
+ * <ul>
+ * <li>The user will be prompted to save any unsaved changes of the active
+ *     level.</li>
+ * <li>Prompts the user for a level file to open.</li>
+ * <li>Loads the level from the file.</li>
+ * <li>Makes it the new active level.</li>
+ * </ul>
  * <p />
- * The user will be prompted if for a file name, if needed.  If the user
- * cancels choosing a file name, then the save action will be cancelled also.
+ * If the user is presented any choice and cancels it, then the open action
+ * will be cancelled also.
  */
-public class SaveAction extends AbstractBaseAction {
+public class OpenAction extends AbstractBaseAction {
 
     private ActionHelper helper;
 
@@ -32,8 +39,8 @@ public class SaveAction extends AbstractBaseAction {
      *
      * @param helper the action helper
      */
-    public SaveAction(ActionHelper helper) {
-        super(Resources.getString("menu.file.save"), Resources.getString("menu.file.save.tooltip"), Resources.getString("menu.file.save.key"));
+    public OpenAction(ActionHelper helper) {
+        super(Resources.getString("menu.file.open"), Resources.getString("menu.file.open.tooltip"), Resources.getString("menu.file.open.key"));
 
         this.helper = helper;
     }
@@ -45,6 +52,6 @@ public class SaveAction extends AbstractBaseAction {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        helper.doSaveAction();
+        helper.doOpenAction();
     }
 }
