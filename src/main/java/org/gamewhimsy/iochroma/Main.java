@@ -1,3 +1,7 @@
+/*
+ * Iochroma Level Editor (c) 2012 Tulonsae
+ */
+
 package org.gamewhimsy.iochroma;
 
 import java.io.File;

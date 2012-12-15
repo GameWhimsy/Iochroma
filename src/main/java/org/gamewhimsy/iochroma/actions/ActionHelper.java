@@ -20,8 +20,8 @@ import javax.swing.JOptionPane;
 
 import org.gamewhimsy.iochroma.Config;
 import org.gamewhimsy.iochroma.Editor;
-import org.gamewhimsy.iochroma.Level;
 import org.gamewhimsy.iochroma.Resources;
+import org.gamewhimsy.iochroma.core.Level;
 
 /**
  * Object containing helper methods for actions.
@@ -63,7 +63,12 @@ public class ActionHelper {
      */
     protected void doOpenAction() {
         if (chooseOpenFile()) {
-            openFile(openFilepath);
+            try {
+                Level level = openFile(openFilepath);
+                editor.addLevel(level);
+            } catch (Exception e) {
+                // do nothing
+            }
         }
     }
 
@@ -98,30 +103,49 @@ public class ActionHelper {
 
     /**
      */
-    private void openFile(String filepath) {
+    private Level openFile(String filepath) throws Exception {
         File levelFile = new File(filepath);
 
-        if (!levelFile.exists()) {
-            showLoadLevelError(Resources.getString("file.not.exist"));
-            return;
+        if (!checkFile(levelFile)) {
+            throw new Exception("Cannot open level file");
         }
-        if (!levelFile.isFile()) {
-            showLoadLevelError(Resources.getString("file.not.normal"));
-            return;
-        }
-        if (!levelFile.canRead()) {
-            showLoadLevelError(Resources.getString("file.not.readable"));
-            return;
-        }
+
+        return new Level(levelFile);
     }
 
     /**
-     * Shows specified text message for load level errors.
+     * Checks if file can be opened.
+     * <p />
+     * Displays a message with the exact problem if a file can't be opened.
+     *
+     * @param file file to be checked
+     * @return false if file can't be opened, true otherwise
+     */
+    private boolean checkFile(File file) {
+
+        if (!file.exists()) {
+            showOpenFileError(Resources.getString("file.not.exist"));
+            return false;
+        }
+        if (!file.isFile()) {
+            showOpenFileError(Resources.getString("file.not.normal"));
+            return false;
+        }
+        if (!file.canRead()) {
+            showOpenFileError(Resources.getString("file.not.readable"));
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Shows specified text message for open file errors.
      *
      * @param textMessage the text for the message dialog
      */
-    protected void showLoadLevelError(String textMessage) {
-        JOptionPane.showMessageDialog(editor.getAppFrame(), Resources.getString("error.open.level"), textMessage, JOptionPane.ERROR_MESSAGE);
+    protected void showOpenFileError(String textMessage) {
+        JOptionPane.showMessageDialog(editor.getAppFrame(), Resources.getString("error.open.file"), textMessage, JOptionPane.ERROR_MESSAGE);
     }
 
     /**

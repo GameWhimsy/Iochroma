@@ -32,6 +32,7 @@ import org.gamewhimsy.iochroma.actions.ExitAction;
 import org.gamewhimsy.iochroma.actions.OpenAction;
 import org.gamewhimsy.iochroma.actions.SaveAction;
 import org.gamewhimsy.iochroma.actions.SaveAsAction;
+import org.gamewhimsy.iochroma.core.Level;
 
 /**
  * Main class for the Iochroma level editor.
