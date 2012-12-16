@@ -19,6 +19,8 @@ public final class Level {
     private String fileExtension = null;
     private String fileType = null;
 
+    private LevelData data = null;
+
     /**
      * Constructs a new (empty) level.
      */
@@ -38,6 +40,7 @@ public final class Level {
         fileName = file.getName();
         fileExtension = parseFileExtension(fileName);
         fileType = parseFileType(fileExtension);
+        load();
     }
 
     /**
@@ -68,6 +71,22 @@ public final class Level {
     }
 
     /**
+     * Loads the level data, using the file type and file path.
+     */
+    private void load() {
+        if (fileType.equalsIgnoreCase("tmx")) {
+            try {
+                data = TiledMapFile.readData(filePath);
+            } catch (Exception e) {
+                // TODO
+            }
+        }
+
+        // to get here means internal error
+        // - load list does not match parseFileType list
+    }
+
+    /**
      * Saves the level.
      *
      * @return true if saved, false otherwise
@@ -91,6 +110,9 @@ public final class Level {
 
     /**
      * Parses the file type, based on the file name extension.
+     * <p />
+     * If the extension is unrecognized, it will throw an exception which
+     * has the extension string as its message.
      *
      * @param ext file extension (e.g., tmx)
      * @return the file type
@@ -102,7 +124,7 @@ public final class Level {
         if (ext.equalsIgnoreCase("tmx")) {
             type = "tmx";
         } else {
-            throw new UnsupportedFileFormatException("unknown extension " + ext);
+            throw new UnsupportedFileFormatException(ext);
         }
 
         return type;

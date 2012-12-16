@@ -16,7 +16,7 @@
     <project.mainclass>Main</project.mainclass>
     <project.releaseVersion>0.0.1</project.releaseVersion>
     <project.nameVersion>dawn</project.nameVersion>
-    <project.buildVersion>b3</project.buildVersion>
+    <project.buildVersion>b4</project.buildVersion>
     <project.javaVersion>1.7</project.javaVersion>
     <junit.version>4.10</junit.version>
   </properties>

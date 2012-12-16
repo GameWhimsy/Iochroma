@@ -10,3 +10,4 @@ Current
 Future
 ------
 - Consider using SWT for a more native look on each platform.
+- Add translation files.

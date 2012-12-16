@@ -22,6 +22,7 @@ import org.gamewhimsy.iochroma.Config;
 import org.gamewhimsy.iochroma.Editor;
 import org.gamewhimsy.iochroma.Resources;
 import org.gamewhimsy.iochroma.core.Level;
+import org.gamewhimsy.iochroma.core.UnsupportedFileFormatException;
 
 /**
  * Object containing helper methods for actions.
@@ -66,6 +67,8 @@ public class ActionHelper {
             try {
                 Level level = openFile(openFilepath);
                 editor.addLevel(level);
+            } catch (UnsupportedFileFormatException e) {
+                showFileTypeError(e.getMessage());
             } catch (Exception e) {
                 // do nothing
             }
@@ -140,12 +143,21 @@ public class ActionHelper {
     }
 
     /**
-     * Shows specified text message for open file errors.
+     * Shows specified text message for open file error.
      *
      * @param textMessage the text for the message dialog
      */
     protected void showOpenFileError(String textMessage) {
-        JOptionPane.showMessageDialog(editor.getAppFrame(), Resources.getString("error.open.file"), textMessage, JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(editor.getAppFrame(), textMessage, Resources.getString("error.open.file"), JOptionPane.ERROR_MESSAGE);
+    }
+
+    /**
+     * Shows unsupported file type error.
+     *
+     * @param type the unrecognized extension
+     */
+    protected void showFileTypeError(String type) {
+        JOptionPane.showMessageDialog(editor.getAppFrame(), type + " - " + Resources.getString("file.format.unsupported"), Resources.getString("error.file.format"), JOptionPane.ERROR_MESSAGE);
     }
 
     /**
